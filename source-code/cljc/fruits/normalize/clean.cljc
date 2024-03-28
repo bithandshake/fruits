@@ -30,7 +30,7 @@
   ;
   ; @param (string) n
   ; @param (string)(opt) exceptions
-  ; Which special characters are allowed to be present in the output string.
+  ; Special characters that are allowed in the output string.
   ; Default: "-"
   ; @param (string)(opt) replacement
   ; Replacement string for special characters.
@@ -83,7 +83,7 @@
   ;
   ; @param (*) n
   ; @param (string)(opt) exceptions
-  ; Which special characters are allowed to be present in the output string.
+  ; Special characters that are allowed in the output string.
   ; Default: "-"
   ; @param (string)(opt) replacement
   ; Replacement string for special characters.
