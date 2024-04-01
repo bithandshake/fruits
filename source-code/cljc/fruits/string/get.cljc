@@ -8,7 +8,7 @@
 (defn first-character
   ; @description
   ; - Returns the first character of the given 'n' string.
-  ; - Converts the output character (Java char type) into string.
+  ; - Converts the output character (Java char type) into a string.
   ;
   ; @param (string) n
   ;
@@ -30,7 +30,7 @@
 (defn second-character
   ; @description
   ; - Returns the second character of the given 'n' string.
-  ; - Converts the output character (Java char type) into string.
+  ; - Converts the output character (Java char type) into a string.
   ;
   ; @param (string) n
   ;
@@ -52,7 +52,7 @@
 (defn last-character
   ; @description
   ; - Returns the first character of the given 'n' string.
-  ; - Converts the output character (Java char type) into string.
+  ; - Converts the output character (Java char type) into a string.
   ;
   ; @param (string) n
   ;
@@ -74,10 +74,14 @@
 (defn nth-character
   ; @description
   ; - Returns the nth character of the given 'n' string.
-  ; - Converts the output character (Java char type) into string.
+  ; - Converts the output character (Java char type) into a string.
   ;
   ; @param (string) n
   ; @param (integer) th
+  ; @param (map)(opt) options
+  ; {:repeat? (boolean)(opt)
+  ;   If TRUE, repeats the given 'n' string to return out of bound positions.
+  ;   Default: false}
   ;
   ; @usage
   ; (nth-character "abc" 2)
@@ -90,7 +94,12 @@
   ; ":"
   ;
   ; @param (string)
-  [n th]
-  (let [n (str n)]
-       (if-let [th (seqable/normalize-dex n th {:adjust? false :mirror? true})]
-               (-> n (nth th) str))))
+  ([n th]
+   (nth-character n th {}))
+
+  ([n th {:keys [repeat?] :as options}]
+   (let [n (str n)]
+        (if-let [th (seqable/normalize-dex n th {:adjust? false :mirror? true})]
+                (-> n (nth th) str)
+                (if repeat? (if (-> n count pos?)
+                                (-> n (str n) (nth-character th options))))))))

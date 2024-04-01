@@ -1,7 +1,9 @@
 
 (ns fruits.normalize.clean
-    #?(:clj  (:require [clojure.string])
+    #?(:clj  (:require [clojure.string]
+                       [fruits.string.api :as string])
        :cljs (:require [clojure.string]
+                       [fruits.string.api      :as string]
                        ["normalize-diacritics" :refer [normalizeSync]])))
 
 ;; ----------------------------------------------------------------------------
@@ -24,7 +26,7 @@
                  (clojure.string/replace #"\p{InCombiningDiacriticalMarks}+" ""))
      :cljs (-> n (normalizeSync))))
 
-(defn remove-special-chars
+(defn remove-special-characters
   ; @description
   ; Removes the special characters from the given 'n' string including accented characters.
   ;
@@ -37,28 +39,29 @@
   ; Default: ""
   ;
   ; @usage
-  ; (remove-special-chars "abc+-.")
+  ; (remove-special-characters "abc+-.")
   ; =>
   ; "abc-"
   ;
   ; @usage
-  ; (remove-special-chars "abc+-.?" "-+")
+  ; (remove-special-characters "abc+-.?" "-+")
   ; =>
   ; "abc+-"
   ;
   ; @return (string)
   ([n]
-   (remove-special-chars n "-"))
+   (remove-special-characters n "-" ""))
 
   ([n exceptions]
-   (remove-special-chars n "-" ""))
+   (remove-special-characters n exceptions ""))
 
   ([n exceptions replacement]
-   (let [pattern     (re-pattern (str "[^\\w\\s"exceptions"]"))
+   (let [exceptions  (string/escape-characters exceptions)
+         pattern     (re-pattern (str "[^\\w\\s"exceptions"]"))
          replacement (str replacement)]
         (clojure.string/replace n pattern replacement))))
 
-(defn replace-blank-chars
+(defn replace-blank-characters
   ; @description
   ; Replaces the blank characters / blank character groups in the given 'n' string with single hyphens.
   ;
@@ -116,14 +119,14 @@
   ;
   ; @return (string)
   ([n]
-   (clean-text n "-"))
+   (clean-text n "-" ""))
 
   ([n exceptions]
-   (clean-text n "-" ""))
+   (clean-text n exceptions ""))
 
   ([n exceptions replacement]
    (-> n (str)
          (deaccent)
-         (remove-special-chars exceptions replacement)
-         (replace-blank-chars)
+         (remove-special-characters exceptions replacement)
+         (replace-blank-characters)
          (clojure.string/lower-case))))

@@ -20,7 +20,7 @@
 
 (defn inc!
   ; @description
-  ; Increases the value of the given atom.
+  ; Increments the value of the given atom.
   ;
   ; @param (atom) n
   ;
@@ -34,7 +34,7 @@
 
 (defn dec!
   ; @description
-  ; Decreases the value of the given atom.
+  ; Decrements the value of the given atom.
   ;
   ; @param (atom) n
   ;

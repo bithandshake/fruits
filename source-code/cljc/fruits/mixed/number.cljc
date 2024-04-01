@@ -1,13 +1,15 @@
 
 (ns fruits.mixed.number
-    (:require [fruits.mixed.convert :as convert]))
+    (:require [fruits.mixed.convert :as convert]
+              [fruits.mixed.join :as join]
+              [fruits.mixed.derive :as derive]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
 (defn add-numbers
   ; @description
-  ; Adds the values of the given parameters that can be converted to a number.
+  ; Adds the given values converted into numbers (non-numeric values are converted into 0).
   ;
   ; @param (list of *) abc
   ;
@@ -28,7 +30,7 @@
 
 (defn subtract-numbers
   ; @description
-  ; Subtracts the values of the given parameters that can be converted to a number.
+  ; Subtracts the given values converted into numbers (non-numeric values are converted into 0).
   ;
   ; @param (list of *) abc
   ;
@@ -44,13 +46,12 @@
   ;
   ; @return (number)
   [& abc]
-  (letfn [(f0 [result x]
-              (- result (convert/to-number x)))]
+  (letfn [(f0 [result x] (- result (convert/to-number x)))]
          (reduce f0 0 abc)))
 
 (defn multiply-numbers
   ; @description
-  ; Multiplies the values of the given parameters that can be converted to a number.
+  ; Multiplies the given values converted into numbers (non-numeric values are converted into 0).
   ;
   ; @param (list of *) abc
   ;
@@ -66,77 +67,134 @@
   ;
   ; @return (number)
   [& abc]
-  (letfn [(f0 [result x]
-              (* result (convert/to-number x)))]
+  (letfn [(f0 [result x] (* result (convert/to-number x)))]
          (reduce f0 1 abc)))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-(defn update-number
+(defn update-as-number
   ; @description
-  ; Converts the given 'n' value into number and applies the given 'f' function on it.
+  ; - Converts the first numeric part of the given 'n' value into a number and applies the given 'f' function on it.
+  ; - If no numeric part found, it provides 0 to the given 'f' function.
+  ; - Returns the output as it returned from the given 'f' function.
   ;
-  ; @param (integer or string) n
+  ; @param (*) n
   ; @param (function) f
   ; @param (list of *)(opt) params
   ;
   ; @usage
-  ; (update-number "123" inc)
+  ; (update-as-number "123" inc)
   ; =>
   ; 124
   ;
   ; @usage
-  ; (update-number "123" + 1)
+  ; (update-as-number "123" + 1)
   ; =>
   ; 124
   ;
   ; @usage
-  ; (update-number 123 + 1)
+  ; (update-as-number 123 + 1)
   ; =>
   ; 124
   ;
   ; @usage
-  ; (update-number "abc-123.456def789" - 10)
+  ; (update-as-number "abc-123.456def789" - 10)
   ; =>
   ; -133.456
   ;
-  ; @return (number)
+  ; @usage
+  ; (update-as-number "abc" inc)
+  ; =>
+  ; 1
+  ;
+  ; @usage
+  ; (update-as-number [] inc)
+  ; =>
+  ; 1
+  ;
+  ; @return (*)
   [n f & params]
   (letfn [(f0 [%] (apply f % params))]
          (-> n convert/to-number f0)))
 
-(defn update-number-part
+(defn update-joined-digits
   ; @description
-  ; - Converts the given 'n' value into number and applies the given 'f' function on it.
-  ; - Keeps the parts of the given 'n' value that cannot be converted into number and returns the output as a string.
+  ; - Joins the decimal digits of the given 'n' value and applies the given 'f' function on it.
+  ; - Provides the joined digits as a string to the given 'f' function.
+  ; - Returns the output as it returned from the given 'f' function.
   ;
-  ; @param (integer or string) n
+  ; @param (*) n
   ; @param (function) f
   ; @param (list of *)(opt) params
   ;
   ; @usage
-  ; (update-number-part "123" inc)
+  ; (update-joined-digits "abc123def456" str "...")
+  ; =>
+  ; "123457..."
+  ;
+  ; @return (*)
+  [n f & params]
+  (letfn [(f0 [%] (apply f % params))]
+         (-> n join/join-digits f0)))
+
+(defn update-joined-digits-as-integer
+  ; @description
+  ; - Joins the decimal digits of the given 'n' value, converts it into an integer and applies the given 'f' function on it.
+  ; - Provides the joined digits as an integer to the given 'f' function.
+  ; - Returns the output as it returned from the given 'f' function.
+  ;
+  ; @param (*) n
+  ; @param (function) f
+  ; @param (list of *)(opt) params
+  ;
+  ; @usage
+  ; (update-joined-digits-as-integer "abc123def456" inc)
+  ; =>
+  ; 123457
+  ;
+  ; @usage
+  ; (update-joined-digits-as-integer "abc-123.456def789" - 10)
+  ; =>
+  ; 123456779
+  ;
+  ; @return (*)
+  [n f & params]
+  (letfn [(f0 [%] (apply f % params))]
+         (-> n join/join-digits derive/derive-integer f0)))
+
+(defn update-numeric-part
+  ; @description
+  ; - Applies the given 'f' function on the first numeric part of the given 'n' value.
+  ; - Keeps the surrounding parts of the given 'n' value.
+  ; - Returns the output as a string.
+  ;
+  ; @param (*) n
+  ; @param (function) f
+  ; @param (list of *)(opt) params
+  ;
+  ; @usage
+  ; (update-numeric-part "123" inc)
   ; =>
   ; "124"
   ;
   ; @usage
-  ; (update-number-part "123" + 1)
+  ; (update-numeric-part "123" + 1)
   ; =>
   ; "124"
   ;
   ; @usage
-  ; (update-number-part 123 + 1)
+  ; (update-numeric-part 123 + 1)
   ; =>
   ; "124"
   ;
   ; @usage
-  ; (update-number-part "abc-123.456def789" - 10)
+  ; (update-numeric-part "abc-123.456def789" - 10)
   ; =>
   ; "abc-133.456def789"
   ;
   ; @usage
-  ; (update-number-part "Value: +10" - 12)
+  ; (update-numeric-part "Value: +10" - 12)
   ; =>
   ; "Value: -2"
   ;
@@ -144,17 +202,18 @@
   [n f & params]
   ; - This function, unlike other number related functions in the 'fruits.mixed.api' library,
   ;   uses a regex pattern that matches the leading plus sign, and the leading zeros as well!
-  ;   E.g., (update-number-part "Value: +10" - 12) => "value: -2"   <- Good :)
-  ;         (update-number-part "Value: +10" - 12) => "value: +-2"  <- Bad  :(
-  ;   E.g., (update-number-part "Value: 05"  + 20) => "value: 25"   <- Good :)
-  ;         (update-number-part "Value: 05"  + 20) => "value: 025"  <- Bad  :(
-  ; - Another solution could be if this function would provide the number part as a string to the 'f' function:
-  ;   E.g., (update-number-part "Value: +10" println) => (println "+10") <- Maybe better for this function?
-  ;         (update-number-part "Value: +10" println) => (println 10)    <- This is how it works now.
+  ;   E.g., (update-numeric-part "Value: +10" - 12) => "value: -2"   <- Good :)
+  ;         (update-numeric-part "Value: +10" - 12) => "value: +-2"  <- Bad  :(
+  ;   E.g., (update-numeric-part "Value:  05" + 20) => "value: 25"   <- Good :)
+  ;         (update-numeric-part "Value:  05" + 20) => "value: 025"  <- Bad  :(
+  ; - Another solution could be if this function would provide the numeric part as a string to the 'f' function:
+  ;   E.g., (update-numeric-part "Value: +10" println) => (println "+10") <- Maybe it would be better?
+  ;         (update-numeric-part "Value: +10" println) => (println 10)    <- This is how it works now.
   (let [n (str n)]
-       (if-let [number (re-find #"[\-\+]?[\d]+[\.]*[\d]*" n)]
+       (if-let [number (->> n (re-find #"[\-\+]?[0-9]+(\.[0-9]+)?") first)]
                (let [number-starts-at (clojure.string/index-of n number)
                      number-ends-at   (+ number-starts-at (count number))]
                     (str (subs n 0 number-starts-at)
-                         (apply update-number number f params)
-                         (subs n number-ends-at))))))
+                         (apply update-as-number number f params)
+                         (subs n number-ends-at)))
+               (-> n))))

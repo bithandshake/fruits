@@ -7,12 +7,12 @@
 ;; ----------------------------------------------------------------------------
 
 (defn replace-part
-  ; @description
+  ; @description 
   ; Replaces the given 'x' value (optionally recursively) with the given 'y' string in the given 'n' string.
   ;
   ; @param (string) n
   ; @param (regex pattern or string) x
-  ; @param (string) y
+  ; @param (string) replacement
   ; @param (map)(opt) options
   ; {:recur? (boolean)(opt)
   ;   Default: false}
@@ -43,12 +43,12 @@
   ; "/"
   ;
   ; @return (string)
-  ([n x y]
-   (replace-part n x y {}))
+  ([n x replacement]
+   (replace-part n x replacement {}))
 
-  ([n x y {:keys [recur?]}]
+  ([n x replacement {:keys [recur?]}]
    (letfn [(f0 [n] (clojure.string/replace (str n) x
-                                           (str y)))
+                                           (str replacement)))
            (f1 [n] (if (-> n f0 (= n))
                        (-> n)
                        (-> n f0 f1)))]

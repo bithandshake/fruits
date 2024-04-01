@@ -22,7 +22,8 @@
               [fruits.string.search  :as search]
               [fruits.string.set     :as set]
               [fruits.string.trim    :as trim]
-              [fruits.string.walk    :as walk]))
+              [fruits.string.walk    :as walk]
+              [fruits.string.escape :as escape]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -61,12 +62,8 @@
 (def WHITE-SPACE  config/WHITE-SPACE)
 
 ; @redirect (fruits.string.contain/*)
-(def contains-part?              contain/contains-part?)
-(def if-contains-part            contain/if-contains-part)
-(def contains-digit?             contain/contains-digit?)
-(def contains-lowercase-letter?  contain/contains-lowercase-letter?)
-(def contains-uppercase-letter?  contain/contains-uppercase-letter?)
-(def contains-special-character? contain/contains-special-character?)
+(def contains-part?   contain/contains-part?)
+(def if-contains-part contain/if-contains-part)
 
 ; @redirect (fruits.string.convert/*)
 (def to-integer     convert/to-integer)
@@ -96,6 +93,9 @@
 (def first-dex-of dex/first-dex-of)
 (def last-dex-of  dex/last-dex-of)
 (def nth-dex-of   dex/nth-dex-of)
+
+; @redirect (fruits.string.escape/*)
+(def escape-characters escape/escape-characters)
 
 ; @redirect (fruits.string.filter/*)
 (def filter-characters filter/filter-characters)

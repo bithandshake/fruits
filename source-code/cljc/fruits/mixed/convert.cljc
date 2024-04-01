@@ -1,7 +1,7 @@
 
 (ns fruits.mixed.convert
     (:require [fruits.mixed.check :as check]
-              [fruits.reader.api  :as reader]))
+              [fruits.mixed.derive :as derive]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
   ; Possible key-value pairs are two-item collections or maps with one key-value pair.
   ;
   ; @description
-  ; Converts the given 'n' value into key-value pair vector in case it is a possible key-value pair.
+  ; Converts the given 'n' value into a key-value pair vector in case it is a possible key-value pair.
   ;
   ; @param (*) n
   ;
@@ -55,7 +55,7 @@
   ; Possible key-value pairs are two-item collections or maps with one key-value pair.
   ;
   ; @description
-  ; Converts the items within the given 'n' value (if collection) into key-value pair vectors in case they are possible key-value pairs.
+  ; Converts the items within the given 'n' value (if collection) into a key-value pair vectors in case they are possible key-value pairs.
   ;
   ; @param (*) n
   ;
@@ -95,7 +95,7 @@
 
 (defn to-data-url
   ; @description
-  ; Converts the given 'n' value into string type data URL.
+  ; Converts the given 'n' value into a string type data URL.
   ;
   ; @param (*) n
   ;
@@ -113,7 +113,7 @@
 
 (defn to-string
   ; @description
-  ; Converts the given 'n' value into string.
+  ; Converts the given 'n' value into a string.
   ;
   ; @param (*) n
   ;
@@ -128,7 +128,7 @@
 
 (defn to-vector
   ; @description
-  ; Converts the given 'n' value into vector.
+  ; Converts the given 'n' value into a vector.
   ;
   ; @param (*) n
   ;
@@ -166,7 +166,7 @@
 
 (defn to-map
   ; @description
-  ; Converts the given 'n' value into map.
+  ; Converts the given 'n' value into a map.
   ;
   ; @param (*) n
   ;
@@ -209,7 +209,7 @@
 
 (defn to-integer
   ; @description
-  ; Converts the given 'n' value into integer.
+  ; Converts the given 'n' value into an integer.
   ;
   ; @param (*) n
   ;
@@ -248,20 +248,13 @@
   ; =>
   ; 8
   ;
-  ; @return (number)
+  ; @return (integer)
   [n]
-  ; @bug (#0550)
-  ; The applied regex pattern asserts that the first digit of the number cannot be 0.
-  ; Otherwise, the 'parse-edn' function would read it as a non-decimal number (e.g., 008).
-  (cond (integer? n) (-> n)                                        ; 8        -> 8
-        (nil?     n) (-> 0)                                        ; nil      -> 0
-        :else (if-let [x (->> n str (re-find #"[\-]?[1-9][\d]*"))] ; "abc123" -> "123"
-                      (reader/parse-edn x)                         ; "123"    -> 123
-                      (-> 0))))                                    ; nil      -> 0
+  (or (derive/derive-integer n) 0))
 
 (defn to-number
   ; @description
-  ; Converts the given 'n' value into number.
+  ; Converts the given 'n' value into a number.
   ;
   ; @param (*) n
   ;
@@ -302,16 +295,11 @@
   ;
   ; @return (number)
   [n]
-  ; @bug (#0550)
-  (cond (number? n) (-> n)                                                   ; 4.2          -> 4.2
-        (nil?    n) (-> 0)                                                   ; nil          -> 0
-        :else (if-let [x (->> n str (re-find #"[\-]?[1-9][\d]*[\.]*[\d]*"))] ; "abc123.456" -> "123.456"
-                      (reader/parse-edn x)                                   ; "123.456"    -> 123.456
-                      (-> 0))))                                              ; nil          -> 0
+  (or (derive/derive-number n) 0))
 
 (defn to-keyword
   ; @description
-  ; Converts the given 'n' value into keyword.
+  ; Converts the given 'n' value into a keyword.
   ;
   ; @param (*) n
   ;
@@ -352,10 +340,7 @@
   ;
   ; @return (*)
   [n]
-  (if (-> n keyword?) (-> n)                                                           ; :a    -> :a
-      (if-let [x (->> n str (re-find #"[a-zA-Z\d\+\-\_\<\>\=\*\!\?\%\&\/\#\:\.\']+"))] ; "[a]" -> "a"
-              (-> x keyword)                                                           ; "a"    -> :a
-              (-> :_))))                                                               ; nil    -> :_
+  (or (derive/derive-keyword n) :_))
 
 (defn to-fn
   ; @description
@@ -418,7 +403,7 @@
 
 (defn to-nil
   ; @description
-  ; Converts the given 'n' value into NIL in case it is an empty value.
+  ; Converts the given 'n' value into a NIL in case it is an empty value.
   ;
   ; @param (*) n
   ;
@@ -447,7 +432,7 @@
 
 (defn to-seqable
   ; @description
-  ; Converts the given 'n' value into vector in case it does not implement the ISeqable protocol.
+  ; Converts the given 'n' value into a vector in case it does not implement the ISeqable protocol.
   ;
   ; @param (*) n
   ;
@@ -479,7 +464,7 @@
 
 (defn to-associative
   ; @description
-  ; Converts the given 'n' value into vector in case it does not implement the IAssociative protocol.
+  ; Converts the given 'n' value into a vector in case it does not implement the IAssociative protocol.
   ;
   ; @param (*) n
   ;

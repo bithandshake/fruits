@@ -10,6 +10,9 @@
 ;; ----------------------------------------------------------------------------
 
 (defn inc-version
+  ; @description
+  ; Increments the given version number.
+  ;
   ; @param (string) n
   ;
   ; @usage
@@ -40,8 +43,9 @@
                        (if-let [delimiter-position (string/first-dex-of version ".")]
                                (recur (string/remove-first-occurence version ".")
                                       (conj delimiter-positions delimiter-position))
-                               (f0 (-> version (mixed/update-number inc)
-                                               (number/leading-zeros (count version)))
+                               (f0 (-> version (mixed/to-integer)
+                                               (inc)
+                                               (number/fill-leading-zeros (count version)))
                                    ; If the 'version' string contained only "9" digits before the increasing,
                                    ; an offset must be applied on the delimiter positions.
                                    ; Otherwise, "9.9" would be updated to "1.00" instead of "10.0".

@@ -13,7 +13,7 @@
   ;
   ; @description
   ; - Normalizes the given cursor value of the given 'n' sequence.
-  ; - The output is a non-negative cursor value that is not less than 0 and not more than the maximum cursor value.
+  ; - The output is a non-negative cursor value that is not less than 0 and not more than the last cursor value.
   ; - The output could be NIL, in case the ':adjust?' parameter is not TRUE!
   ;
   ; @param (*) n
@@ -349,7 +349,7 @@
   ;       Cursors of "abc": 0, 1, 2, 3
   ;
   ; @description
-  ; Increases the given 'cursor' value in case the result falls between the bounds of the given 'n' sequence,
+  ; Increments the given 'cursor' value in case the result falls between the bounds of the given 'n' sequence,
   ; otherwise returns the given 'cursor' value.
   ;
   ; @param (seqable) n
@@ -381,7 +381,7 @@
   ;       Cursors of "abc": 0, 1, 2, 3
   ;
   ; @description
-  ; Decreases the given 'cursor' value in case the result falls between the bounds of the given 'n' sequence,
+  ; Decrements the given 'cursor' value in case the result falls between the bounds of the given 'n' sequence,
   ; otherwise returns the given 'cursor' value.
   ;
   ; @param (seqable) n

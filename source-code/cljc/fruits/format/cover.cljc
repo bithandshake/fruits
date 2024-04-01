@@ -6,6 +6,9 @@
 ;; ----------------------------------------------------------------------------
 
 (defn cover-email-address
+  ; @description
+  ; Covers the local part with '*' characters within the given email address.
+  ;
   ; @param (string) n
   ;
   ; @usage

@@ -60,6 +60,10 @@
   ;
   ; @param (vector) n
   ; @param (integer) th
+  ; @param (map)(opt) options
+  ; {:repeat? (boolean)(opt)
+  ;   If TRUE, repeats the given 'n' string to return out of bound positions.
+  ;   Default: false}
   ;
   ; @usage
   ; (nth-item [:a :b :c] 2)
@@ -67,7 +71,12 @@
   ; :c
   ;
   ; @return (*)
-  [n th]
-  (let [n (mixed/to-vector n)]
-       (if-let [th (seqable/normalize-dex n th {:adjust? false :mirror? true})]
-               (nth n th))))
+  ([n th]
+   (nth-item n th {}))
+
+  ([n th {:keys [repeat?] :as options}]
+   (let [n (mixed/to-vector n)]
+        (if-let [th (seqable/normalize-dex n th {:adjust? false :mirror? true})]
+                (nth n th)
+                (if repeat? (if (-> n count pos?)
+                                (-> n (concat n) (nth-item th options))))))))

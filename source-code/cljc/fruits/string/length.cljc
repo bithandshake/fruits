@@ -6,6 +6,9 @@
 ;; ----------------------------------------------------------------------------
 
 (defn length
+  ; @description
+  ; Returns the length of the given 'n' string.
+  ;
   ; @param (string) n
   ;
   ; @usage
@@ -52,7 +55,7 @@
 
 (defn length-min?
   ; @description
-  ; Returns TRUE if the given 'n' string has a length that is not smaller than the given 'min'.
+  ; Returns TRUE if the length of the given 'n' string is not smaller than the given 'min' value.
   ;
   ; @param (string) n
   ; @param (integer) min
@@ -75,7 +78,7 @@
 
 (defn length-max?
   ; @description
-  ; Returns TRUE if the given 'n' string has a length that is not greater than the given 'max'.
+  ; Returns TRUE if the length of the given 'n' string is not greater than the given 'max' value.
   ;
   ; @param (string) n
   ; @param (integer) max
@@ -98,7 +101,7 @@
 
 (defn length-between?
   ; @description
-  ; Returns TRUE if the given 'n' string has a length between the given 'min' and 'max' values.
+  ; Returns TRUE if the length of the given 'n' string falls between the given 'min' and 'max' values.
   ;
   ; @param (string) n
   ; @param (integer) min
@@ -122,7 +125,7 @@
 
 (defn length?
   ; @description
-  ; Returns TRUE if the given 'n' string has the exact same length as the given 'length' value.
+  ; Returns TRUE if the length of the given 'n' string matches the given 'length' value.
   ;
   ; @param (string) n
   ; @param (integer) length

@@ -39,7 +39,7 @@
   ; @return (boolean)
   [n]
   ; The 'clojure.core/empty?' function can be applied only on seqable values.
-  ; (Nonseqable values couldn't be empty! E.g., :keyword)
+  ; (Nonseqable values cannot be empty, e.g., :keyword)
   (and (-> n seqable?)
        (-> n clojure.core/empty?)))
 
@@ -73,7 +73,7 @@
   [n]
   ; The 'clojure.core/empty?' function can be applied only on seqable values.
   ; (A) If the value of 'n' is not seqable, then it is considered as a nonempty value (e.g., keyword, integer, etc.).
-  ; (B) If the value of 'n' is seqable, then it is checked whether it is empty (e.g., nil, map, string, vector, etc.)
+  ; (B) If the value of 'n' is seqable, then it is checked whether is it empty (e.g., nil, map, string, vector, etc.)
   (or ; (A)
       (-> n seqable? not)
       ; (B)

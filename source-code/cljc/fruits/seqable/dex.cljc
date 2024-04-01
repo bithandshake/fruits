@@ -13,7 +13,7 @@
   ;
   ; @description
   ; - Normalizes the given index value of the given 'n' sequence.
-  ; - The output is a non-negative index value that is not less than 0 and not more than the maximum index value.
+  ; - The output is a non-negative index value that is not less than 0 and not more than the last index value.
   ; - The output could be NIL, in case the ':adjust?' parameter is not TRUE!
   ;
   ; @param (*) string
@@ -377,7 +377,7 @@
   ;       Cursors of "abc": 0, 1, 2, 3
   ;
   ; @description
-  ; Increases the given 'dex' value in case the result falls between the bounds of the given 'n' sequence,
+  ; Increments the given 'dex' value in case the result falls between the bounds of the given 'n' sequence,
   ; otherwise returns the given 'dex' value.
   ;
   ; @param (seqable) n
@@ -410,7 +410,7 @@
   ;       Cursors of "abc": 0, 1, 2, 3
   ;
   ; @description
-  ; Decreases the given 'dex' value in case the result falls between the bounds of the given 'n' sequence,
+  ; Decrements the given 'dex' value in case the result falls between the bounds of the given 'n' sequence,
   ; otherwise returns the given 'dex' value.
   ;
   ; @param (seqable) n

@@ -5,7 +5,9 @@
               [fruits.mixed.convert :as convert]
               [fruits.mixed.number  :as number]
               [fruits.mixed.parse   :as parse]
-              [fruits.mixed.type    :as type]))
+              [fruits.mixed.type    :as type]
+              [fruits.mixed.join    :as join]
+              [fruits.mixed.derive    :as derive]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -32,12 +34,22 @@
 (def to-seqable     convert/to-seqable)
 (def to-associative convert/to-associative)
 
+; @redirect (fruits.mixed.derive/*)
+(def derive-integer derive/derive-integer)
+(def derive-number  derive/derive-number)
+(def derive-keyword derive/derive-keyword)
+
+; @redirect (fruits.mixed.join/*)
+(def join-digits join/join-digits)
+
 ; @redirect (fruits.mixed.number/*)
-(def add-numbers        number/add-numbers)
-(def subtract-numbers   number/subtract-numbers)
-(def multiply-numbers   number/multiply-numbers)
-(def update-number      number/update-number)
-(def update-number-part number/update-number-part)
+(def add-numbers                     number/add-numbers)
+(def subtract-numbers                number/subtract-numbers)
+(def multiply-numbers                number/multiply-numbers)
+(def update-as-number                number/update-as-number)
+(def update-joined-digits            number/update-joined-digits)
+(def update-joined-digits-as-integer number/update-joined-digits-as-integer)
+(def update-numeric-part             number/update-numeric-part)
 
 ; @redirect (fruits.mixed.parse/*)
 (def parse-number parse/parse-number)

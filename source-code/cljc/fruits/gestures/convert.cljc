@@ -49,11 +49,11 @@
   ([item-label concurent-labels]
    (letfn [(f0 [n] (-> (vector/contains-item? concurent-labels n) not))
            (f1 [n] (if (type/ordered-label? n)
-                       (let [copy-dex      (string/after-last-occurence  n "#" {:return? false})
-                             label-base    (string/before-last-occurence n "#" {:return? true})
-                             next-copy-dex (mixed/update-number copy-dex inc)]
+                       (let [copy-dex      (-> n (string/after-last-occurence  "#" {:return? false}))
+                             label-base    (-> n (string/before-last-occurence "#" {:return? true}))
+                             next-copy-dex (-> copy-dex mixed/to-integer inc)]
                             (str label-base "#" next-copy-dex))
-                       (if (string/not-empty? n)
-                           (str n " #2")
-                           (str    "#2"))))]
+                       (if (-> n   (string/not-empty?))
+                           (-> n   (str " #2"))
+                           (-> nil (str  "#2")))))]
           (do-while f1 item-label f0))))

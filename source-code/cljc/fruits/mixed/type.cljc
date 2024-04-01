@@ -85,7 +85,7 @@
   ;
   ; @return (boolean)
   [n]
-  (number? n))
+  (-> n number?))
 
 (defn whole-number?
   ; @description

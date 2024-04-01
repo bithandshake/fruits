@@ -12,12 +12,13 @@
 
 ; @redirect (fruits.format.number/*)
 (def sign-number          number/sign-number)
+(def format-number        number/format-number)
 (def group-number         number/group-number)
-(def leading-zeros        number/leading-zeros)
+(def fill-leading-zeros   number/fill-leading-zeros)
 (def remove-leading-zeros number/remove-leading-zeros)
-(def trailing-zeros       number/trailing-zeros)
-(def decimals             number/decimals)
-(def round                number/round)
+(def fill-trailing-zeros  number/fill-trailing-zeros)
+(def decimal-scale        number/decimal-scale)
+(def abbreviate-number    number/abbreviate-number)
 
 ; @redirect (fruits.format.version/*)
 (def inc-version version/inc-version)
